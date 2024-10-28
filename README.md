@@ -2,11 +2,24 @@
 
 This project is a web application that tracks the user's geographical location and saves it to a MySQL database. It consists of a frontend built with React and a backend powered by Node.js and Express.
 
+## Technologies Used
+
+- **Frontend:**
+  - React
+  - HTML
+  - CSS
+  - JavaScript
+
+- **Backend:**
+  - Node.js
+  - Express
+  - MySQL
+
 ## Getting Started
 
 To get a copy of the project up and running on your local machine for development and testing purposes, follow these instructions.
 
-## Prerequisites
+### Prerequisites
 
 Make sure you have the following installed on your machine:
 
@@ -18,19 +31,19 @@ Make sure you have the following installed on your machine:
 Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/geo-location.git
+git clone https://github.com/ChandaMC/Geo-Location.git
 ```
 
 ## Installation
 Backend
 Navigate to the backend directory:
 ```bash
-Copy code
+
 cd geo-location/back-end
 ```
 Install the required Node.js packages:
 ```bash
-Copy code
+
 npm install
 ```
 
@@ -41,7 +54,6 @@ Start your MySQL server.
 Create a database and a table for storing positions with the following SQL commands:
 sql
 ```bash
-Copy code
 CREATE DATABASE geo_location;
 
 USE geo_location;
@@ -57,13 +69,11 @@ CREATE TABLE positions (
 Frontend
 Navigate to the frontend directory:
 ```bash
-Copy code
 cd geo-location/front-end
 ```
 
 Install the required React packages:
 ```bash
-Copy code
 npm install
 ```
 
@@ -71,34 +81,34 @@ Running the Project
 Start the Backend Server
 Navigate to the backend directory:
 ```bash
-Copy code
+
 cd geo-location/back-end
 ```
 
 Start the Node.js server:
 ```bash
-Copy code
+
 npm start
 ```
 
-The backend server will run on [http://localhost:5000].(http://localhost:5000).
+The backend server will run on [tnis link].(http://localhost:5000).
 
 Start the Frontend Application
 Open a new terminal window or tab.
 
 Navigate to the frontend directory:
 ```bash
-Copy code
+
 cd geo-location/front-end
 ```
 
 Start the React application:
 ```bash
-Copy code
+
 npm start
 ```
 
-The frontend will be accessible at  [http://localhost:5000].(http://localhost:5000).
+The frontend will be accessible at  [this link].(http://localhost:5000).
 
 Available Scripts
 In the frontend project directory, you can run:
@@ -107,7 +117,7 @@ npm start
 ```
 
 Runs the app in the development mode.
-Open  [http://localhost:3000].(http://localhost:3000). to view it in your browser.
+Open [here].(http://localhost:3000). to view it in your browser.
 The page will reload when you make changes. 
 
 You may also see any lint errors in the console.
@@ -147,7 +157,6 @@ Description: Saves the latitude and longitude to the database.
 Request Body:
 ```bash
 json
-Copy code
 {
     "latitude": -15.4042368,
     "longitude": 28.3148288
@@ -158,7 +167,6 @@ Response:
 Success:
 ```bash
 json
-Copy code
 {
     "message": "Position saved successfully!"
 }
@@ -167,7 +175,6 @@ Copy code
 Error:
 ```bash
 json
-Copy code
 {
     "message": "Failed to save position",
     "error": "Error details"
