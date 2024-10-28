@@ -1,34 +1,35 @@
-// src/components/PositionForm.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./PositionForm.css";
 
 const PositionForm = () => {
     const [position, setPosition] = useState({ latitude: null, longitude: null });
-    const [status, setStatus] = useState(""); // State for success/error message
+    const [status, setStatus] = useState("");
 
-    const [loading, setLoading] = useState(false);
+    const updatePosition = () => {
+        console.log("Attempting to retrieve position...");  // Log every attempt to retrieve position
 
-    const updatePosition = (retryCount = 0) => {
         if (navigator.geolocation) {
-            setLoading(true);
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setPosition({ latitude, longitude });
-                    setLoading(false);
+
+                    console.log("Position retrieved:", latitude, longitude);
+
+                    // Send position to backend server
+                    axios
+                        .post("http://localhost:5000/api/save-position", { latitude, longitude })
+                        .then((response) => {
+                            console.log(response.data);
+                            setStatus("Position saved successfully!");
+                        })
+                        .catch((error) => {
+                            console.error("Error saving position:", error);
+                            setStatus("Failed to save position.");
+                        });
                 },
                 (error) => {
                     console.error("Error getting position:", error);
-                    setLoading(false);
-                    if (retryCount < 3) {
-                        setTimeout(() => updatePosition(retryCount + 1), 5000); // Retry after 5 seconds
-                    }
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
                 }
             );
         } else {
@@ -36,30 +37,18 @@ const PositionForm = () => {
         }
     };
 
-
+    // Set up the interval to update position every 20 seconds
     useEffect(() => {
-        const interval = setInterval(updatePosition, 20000); // Update position every 20 seconds
-        return () => clearInterval(interval); // Cleanup on component unmount
+        console.log("Setting up 20-second interval for position updates.");  // Confirm interval setup
+        const interval = setInterval(updatePosition, 20000);
+        return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="position-form">
+        <div>
             <h2>Current Position:</h2>
-            {loading ? (
-                <p>Loading...</p> // Show loading message
-            ) : (
-                <>
-                    <label>
-                        Latitude:
-                        <input type="text" value={position.latitude || ""} readOnly />
-                    </label>
-                    <br />
-                    <label>
-                        Longitude:
-                        <input type="text" value={position.longitude || ""} readOnly />
-                    </label>
-                </>
-            )}
+            <p>Latitude: {position.latitude}</p>
+            <p>Longitude: {position.longitude}</p>
             {status && <p>{status}</p>}
         </div>
     );
