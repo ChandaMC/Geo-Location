@@ -40,6 +40,7 @@ const db = mysql.createConnection({
     user: 'root', // replace with your MySQL username
     password: '', // replace with your MySQL password
     database: 'geo_location',
+    port: '3307'
 });
 
 db.connect((err) => {
