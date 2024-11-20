@@ -1,0 +1,33 @@
+Here is the project structure:  geo-location/
+│
+├── back-end/                               # Backend directory for Node.js and Express server
+│   ├── node_modules/                       # Node.js dependencies
+│   ├── config/                             # Configuration files (e.g., database connection)
+│   │   └── db.js                           # MySQL connection setup
+│   │   └── database_setup.sql
+│   ├── controllers/                        # Controller files for handling requests
+│   │   └── locationController.js           # Controller for location-related logic
+│   ├── models/                             # Database models
+│   │   └── Location.js                     # Location model (schema) for storing location data
+│   ├── routes/                             # API routes
+│   │   └── locationRoutes.js               # Routes for location endpoints
+│   ├── server.js                           # Main server file (entry point)
+│   ├── package.json                        # Backend npm dependencies and scripts
+│   └── package-lock.json                   # Backend npm dependencies and scripts
+│
+└── front-end/                              # Frontend directory for React app
+    ├── node_modules/                       # React dependencies
+    ├── public/                             # Public directory for static assets
+    │   ├── index.html                      # Main HTML file for React app
+    │   └── favicon.ico                     # Icon for the app
+    ├── src/                                # Source files for the React app
+    │   ├── components/                     # Reusable components
+    │   │   ├── PositionForm.jsx            # Component for displaying position data
+    │   │   └── PositionForm.css            # Styling for the position component
+    │   ├── App.css                         # Styling for the main App component
+    │   ├── App.jsx                         # Main App component
+    │   ├── index.js                        # Entry point for React app
+    │   └── services/                       # API service files
+    │       └── locationService.js          # Axios setup for interacting with backend API
+    ├── package.json                        # Frontend npm dependencies and scripts
+    └── README.md                           # Frontend-specific README
