@@ -1,0 +1,23 @@
+.position-form {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border: 1px solid #ccc;
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+.position-form h2 {
+    margin-bottom: 10px;
+}
+
+.position-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.position-form input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1em;
+    margin-top: 5px;
+}
