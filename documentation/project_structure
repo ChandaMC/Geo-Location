@@ -8,7 +8,7 @@ Here is the project structure:  geo-location/
 │   ├── controllers/                        # Controller files for handling requests
 │   │   └── locationController.js           # Controller for location-related logic
 │   ├── models/                             # Database models
-│   │   └── Location.js                     # Location model (schema) for storing location data
+│   │   └── Position.js                     # Location model (schema) for storing location data
 │   ├── routes/                             # API routes
 │   │   └── locationRoutes.js               # Routes for location endpoints
 │   ├── server.js                           # Main server file (entry point)
