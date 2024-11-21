@@ -1,4 +1,4 @@
-// model/Position.js
+// my_model/Position.js
 
 const mongoose = require('mongoose');
 
@@ -8,7 +8,7 @@ const positionSchema = new mongoose.Schema({
     longitude: { type: Number, required: true },
 }, { timestamps: true });  // Optionally, add timestamps to track when each position is created
 
-// Create a model based on the schema
+// Create a my_model based on the schema
 const Position = mongoose.model('geo_position', positionSchema);
 
 module.exports = Position;

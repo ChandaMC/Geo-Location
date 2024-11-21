@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Position = require('model/Position.js');  // Import the Position model
+const Position = require('./my_model/Position');  // Import the Position
 
 const app = express();
 const PORT = process.env.PORT || 5000;

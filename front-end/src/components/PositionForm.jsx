@@ -1,24 +1,33 @@
-// Geo-Location/front-end/src/components/PositionForm.jsx
+// src/components/PositionForm.jsx
 
 import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import axios from "axios";
+import "./PositionForm.css"; // Custom styles for better interface
+
+// Fix for missing default icon issue in Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+    iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
 
 const PositionForm = () => {
     const [position, setPosition] = useState({ latitude: null, longitude: null });
     const [status, setStatus] = useState("");
 
     const updatePosition = () => {
-        console.log("Attempting to retrieve position...");  // Log every attempt to retrieve position
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     setPosition({ latitude, longitude });
+                    setStatus("Position updated!");
 
-                    console.log("Position retrieved:", latitude, longitude);
-
-                    // Send position to backend server
+                    // Send position to backend
                     axios
                         .post("http://localhost:5000/api/save-position", { latitude, longitude })
                         .then((response) => {
@@ -36,24 +45,47 @@ const PositionForm = () => {
                 }
             );
         } else {
-            console.error("Geolocation is not supported by this browser.");
-            setStatus("Geolocation is not supported by this browser.");
+            setStatus("Geolocation is not supported by your browser.");
         }
     };
 
-    // Set up the interval to update position every 20 seconds
     useEffect(() => {
-        console.log("Setting up 20-second interval for position updates.");  // Confirm interval setup
+        // Automatically update position every 20 seconds
         const interval = setInterval(updatePosition, 20000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div>
-            <h2>Current Position:</h2>
+        <div className="position-form">
+            <h2>Geo-Location Tracker</h2>
             <p>Latitude: {position.latitude}</p>
             <p>Longitude: {position.longitude}</p>
-            {status && <p>{status}</p>}
+            {status && <p className="status">{status}</p>}
+
+            {/* Map Integration */}
+            <div className="map-container">
+                {position.latitude && position.longitude ? (
+                    <MapContainer
+                        center={[position.latitude, position.longitude]}
+                        zoom={15}
+                        scrollWheelZoom={true}
+                        style={{ height: "400px", width: "100%", borderRadius: "8px" }}
+                    >
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <Marker position={[position.latitude, position.longitude]}>
+                            <Popup>
+                                You are here: <br />
+                                Lat: {position.latitude}, Lng: {position.longitude}
+                            </Popup>
+                        </Marker>
+                    </MapContainer>
+                ) : (
+                    <p className="map-placeholder">Fetching your location...</p>
+                )}
+            </div>
         </div>
     );
 };
