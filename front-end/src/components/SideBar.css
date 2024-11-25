@@ -1,0 +1,50 @@
+/*src/components/SideBar.css*/
+
+.sidebar {
+    width: 100px;
+    height: 97.2vh;
+    background: #6200ea;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    margin: 20px 0;
+    font-size: 0.6em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.menu {
+    flex: 1;
+    width: 100%;
+}
+
+.menu-item {
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item:hover, .menu-item:active {
+    background: white;
+    color: #6200ea;
+}
+
+.profile {
+    margin-top: auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-icon {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
