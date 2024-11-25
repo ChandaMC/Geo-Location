@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./CoordinatesHistory.css";
-import locationService from "../services/locationService.js";
 import axios from "axios";
 
 
@@ -11,7 +10,6 @@ const CoordinateHistory = () => {
         const fetchCoordinates = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/coordinates");
-                // const response = await locationService.getLastCoordinates();
                 setCoordinates(response.data);
             } catch (error) {
                 console.error("Error fetching coordinates history:", error);
@@ -28,12 +26,18 @@ const CoordinateHistory = () => {
                 <ul>
                     {coordinates.length > 0 ? (
                         coordinates.map((coord, index) => (
-                            <li key={coord._id ||index}>
-                                <span>Latitude: {coord.latitude}</span>
-                                <span>Longitude: {coord.longitude}</span>
-                                <span>
-                                    Captured at:{" "}
-                                    {new Date(coord.timestamp).toLocaleString()}
+                            <li className="coordinate-item" key={coord._id ||index}>
+                                <span className="latitude">
+                                    <strong>Latitude: </strong>
+                                    <i>{coord.latitude}</i>
+                                </span>
+                                <span className="longitude">
+                                    <strong>Longitude: </strong>
+                                    <i>{coord.longitude}</i>
+                                </span>
+                                <span className="timestamp">
+                                    <strong>Captured at:{" "}</strong>
+                                    <i className="fas fa-clock">{new Date(coord.timestamp).toLocaleString()}</i>
                                 </span>
                             </li>
                         ))
