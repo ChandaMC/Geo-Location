@@ -2,6 +2,7 @@
 
 const Position = require("../../../back-end/my_model/Position.js");
 
+// Controller function to handle fetching coordinates
 const getCoordinatesHistory = async (req, res) => {
     try {
         const position = await Position.find()

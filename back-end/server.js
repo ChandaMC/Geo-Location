@@ -5,13 +5,18 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Position = require('./my_model/Position');  // Import the Position
+const locationRoutes = require("./routes/locationRoutes.js")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.json());
+
+// Register the routes
+app.use("/api", locationRoutes);  // Import the API routes
 
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/Geo_location', {
