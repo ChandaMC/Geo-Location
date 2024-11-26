@@ -1,12 +1,31 @@
 // src/component/CoordinateHistory.jsx
 
 import React, { useEffect, useState } from "react";
-import { useCoordinateContext } from "../context/CoordinateContext";
+import { useCoordinateContext } from "../context/CoordinateContext.jsx";
 import "./CoordinatesHistory.css";
 import axios from "axios";
 
 const CoordinateHistory = () => {
-    const { coordinates, timer, status } = useCoordinateContext();
+    const { timer, status } = useCoordinateContext();
+    const [coordinates, setCoordinates] = useState([]);
+
+
+    // Function to fetch coordinates
+    const fetchCoordinates = async () => {
+        try {
+            const response = await axios.get("/api/coordinates");
+            setCoordinates(response.data);
+        } catch (error) {
+            console.error("Error fetching coordinates history:", error);
+        }
+    };
+
+    // Fetch coordinates when the timer reaches 0
+    useEffect(() => {
+        if (timer === 0) {
+            fetchCoordinates();
+        }
+    }, [timer]);
 
     return (
         <div className="coordinate-history">
@@ -22,7 +41,7 @@ const CoordinateHistory = () => {
             </ul>
 
             <ul className="coordinate-list">
-                {coordinates.length > 0 ? (
+                { coordinates.length > 0 ? (
                     coordinates.map((coord, index) => (
                         <li className="coordinate-item" key={coord._id ||index}>
                             <span className="latitude">
