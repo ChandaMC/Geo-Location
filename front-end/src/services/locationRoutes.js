@@ -1,3 +1,5 @@
+// src/components/locationRoutes.js
+
 const express = require('express');
 const router = express.Router();
 // const { getCoordinatesHistory } = require("./locationController.js");
