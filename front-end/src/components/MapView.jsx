@@ -1,6 +1,4 @@
-// src/components/MapView.jsx
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -14,11 +12,21 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
+const Loader = () => {
+    return (
+        <div className="loader">
+            <div className="spinner"></div>
+            <p>Fetching your location...</p>
+        </div>
+    );
+};
+
 const MapView = ({ latitude, longitude }) => {
     return (
         <>
             {latitude && longitude ? (
-                <MapContainer className="map-view"
+                <MapContainer
+                    className="map-view"
                     center={[latitude, longitude]}
                     zoom={15}
                     scrollWheelZoom={true}
@@ -36,7 +44,7 @@ const MapView = ({ latitude, longitude }) => {
                     </Marker>
                 </MapContainer>
             ) : (
-                <p className="map-placeholder">Fetching your location...</p>
+                <Loader />
             )}
         </>
     );
