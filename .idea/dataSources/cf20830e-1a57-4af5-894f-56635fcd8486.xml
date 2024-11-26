@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="Geo_location@localhost">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.53">
+    <root id="1">
+      <ServerVersion>8.0.3</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="Geo_location">
+      <Current>1</Current>
+      <LastIntrospectionLocalTimestamp>2024-11-22.13:36:03</LastIntrospectionLocalTimestamp>
+    </schema>
+    <schema id="3" parent="1" name="admin"/>
+    <schema id="4" parent="1" name="config"/>
+    <schema id="5" parent="1" name="local"/>
+    <table id="6" parent="2" name="geo_positions"/>
+    <column id="7" parent="6" name="_id">
+      <Position>1</Position>
+      <StoredType>ObjectId|12s</StoredType>
+    </column>
+    <column id="8" parent="6" name="__v">
+      <Position>2</Position>
+      <StoredType>Int32|4s</StoredType>
+    </column>
+    <column id="9" parent="6" name="createdAt">
+      <Position>3</Position>
+      <StoredType>ISODate|91s</StoredType>
+    </column>
+    <column id="10" parent="6" name="latitude">
+      <Position>4</Position>
+      <StoredType>Double|8s</StoredType>
+    </column>
+    <column id="11" parent="6" name="longitude">
+      <Position>5</Position>
+      <StoredType>Double|8s</StoredType>
+    </column>
+    <column id="12" parent="6" name="updatedAt">
+      <Position>6</Position>
+      <StoredType>ISODate|91s</StoredType>
+    </column>
+    <index id="13" parent="6" name="_id_">
+      <ColNames>_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+  </database-model>
+</dataSource>
