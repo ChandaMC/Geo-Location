@@ -7,7 +7,7 @@ const getCoordinatesHistory = async (req, res) => {
     try {
         const position = await Position.find()
             .sort({ timestamp: 1}) // Sort by timestamp in descending order
-            .limit(3) // Get the last 3 coordinates
+            .limit(4) // Get the last 3 coordinates
         res.status(200).json(position || []);
     }
     catch (error) {

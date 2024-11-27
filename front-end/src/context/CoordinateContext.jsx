@@ -8,7 +8,7 @@ const CoordinateContext = createContext();
 export const CoordinateProvider = ({ children }) => {
     const [coordinates, setCoordinates] = useState([]);
     const [position, setPosition] = useState({ latitude: null, longitude: null });
-    const [timer, setTimer] = useState(20);
+    const [timer, setTimer] = useState(25);
     const [status, setStatus] = useState("Waiting for new connection...");
 
     const fetchCoordinates = async () => {

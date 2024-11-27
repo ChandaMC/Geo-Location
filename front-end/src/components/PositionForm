@@ -1,93 +1,106 @@
-// src/components/PositionForm.jsx
+// src/components/CoordinateHistory.jsx
 
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import React, { useEffect, useState } from "react";
+import { useCoordinateContext } from "../context/CoordinateContext.jsx";
+import "./CoordinatesHistory.css";
 import axios from "axios";
-import "./PositionForm.css"; // Custom styles for better interface
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc"; // Import the utc plugin
+import timezone from "dayjs/plugin/timezone"; // Import the timezone plugin
 
-// Fix for missing default icon issue in Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-    iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-});
+dayjs.extend(utc); // Extend utc plugin
+dayjs.extend(timezone); // Extend timezone plugin
 
-const PositionForm = () => {
-    const [position, setPosition] = useState({ latitude: null, longitude: null });
-    const [status, setStatus] = useState("");
+const CoordinateHistory = () => {
+    const { timer, status } = useCoordinateContext();
+    const [currentCoordinate, setCurrentCoordinate] = useState(null); // For the top <ul>
+    const [coordinateHistory, setCoordinateHistory] = useState([]); // For the bottom <ul>
 
-    const updatePosition = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setPosition({ latitude, longitude });
-                    setStatus("Position updated!");
+    // Function to fetch the latest coordinate
+    const fetchLatestCoordinate = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/coordinates");
+            console.log("Fetched Latest Coordinate:", response.data);
+            const latestCoordinate = response.data;
 
-                    // Send position to backend
-                    axios
-                        .post("http://localhost:5000/api/save-position", { latitude, longitude })
-                        .then((response) => {
-                            console.log(response.data);
-                            setStatus("Position saved successfully!");
-                        })
-                        .catch((error) => {
-                            console.error("Error saving position:", error);
-                            setStatus("Failed to save position.");
-                        });
-                },
-                (error) => {
-                    console.error("Error getting position:", error);
-                    setStatus("Error retrieving position.");
-                }
-            );
-        } else {
-            setStatus("Geolocation is not supported by your browser.");
+            // Update current coordinate
+            setCurrentCoordinate(latestCoordinate);
+
+            // Add the new coordinate to the history
+            setCoordinateHistory((prevHistory) => [latestCoordinate, ...prevHistory]);
+        } catch (error) {
+            console.error("Error fetching latest coordinate:", error);
         }
     };
 
     useEffect(() => {
-        // Automatically update position every 20 seconds
-        const interval = setInterval(updatePosition, 20000);
-        return () => clearInterval(interval);
-    }, []);
+        if (timer === 0) {
+            fetchLatestCoordinate();
+        }
+    }, [timer]);
 
     return (
-        <div className="position-form">
-            <h2>Geo-Location Tracker</h2>
-            <p>Latitude: {position.latitude}</p>
-            <p>Longitude: {position.longitude}</p>
-            {status && <p className="status">{status}</p>}
-
-            {/* Map Integration */}
-            <div className="map-container">
-                {position.latitude && position.longitude ? (
-                    <MapContainer
-                        center={[position.latitude, position.longitude]}
-                        zoom={15}
-                        scrollWheelZoom={true}
-                        style={{ height: "400px", width: "100%", borderRadius: "8px" }}
-                    >
-                        <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        />
-                        <Marker position={[position.latitude, position.longitude]}>
-                            <Popup>
-                                You are here: <br />
-                                Lat: {position.latitude}, Lng: {position.longitude}
-                            </Popup>
-                        </Marker>
-                    </MapContainer>
-                ) : (
-                    <p className="map-placeholder">Fetching your location...</p>
+        <div className="coordinate-history">
+            <h3>Current Coordinates</h3>
+            {/* Top Section */}
+            <ul>
+                <li>
+                    <span>Status:
+                        <i className="status"> {status}</i>
+                    </span>
+                    <span> | Next Update in: {timer} sec</span>
+                </li>
+                {currentCoordinate && (
+                    <li>
+                        <span className="latitude">
+                            <strong>Latitude: </strong>
+                            <i>{currentCoordinate.latitude}</i>
+                        </span>
+                        <span className="longitude">
+                            <strong>Longitude: </strong>
+                            <i>{currentCoordinate.longitude}</i>
+                        </span>
+                        <span className="timestamp">
+                            <strong>Captured at: </strong>
+                            <i className="fas fa-clock">
+                                {currentCoordinate.timestamp && dayjs(currentCoordinate.timestamp).isValid()
+                                    ? dayjs(currentCoordinate.timestamp).tz("Africa/Lusaka", true).format("YYYY-MM-DD HH:mm:ss")
+                                    : "Invalid timestamp"}
+                            </i>
+                        </span>
+                    </li>
                 )}
-            </div>
+            </ul>
+
+            {/* Bottom Section */}
+            <ul className="coordinate-list">
+                {coordinateHistory.length > 0 ? (
+                    coordinateHistory.map((coord, index) => (
+                        <li className="coordinate-item" key={coord._id || index}>
+                            <span className="latitude">
+                                <strong>Latitude: </strong>
+                                <i>{coord.latitude}</i>
+                            </span>
+                            <span className="longitude">
+                                <strong>Longitude: </strong>
+                                <i>{coord.longitude}</i>
+                            </span>
+                            <span className="timestamp">
+                                <strong>Captured at: </strong>
+                                <i className="fas fa-clock">
+                                    {coord.timestamp && dayjs(coord.timestamp).isValid()
+                                        ? dayjs(coord.timestamp).tz("Africa/Lusaka", true).format("YYYY-MM-DD HH:mm:ss")
+                                        : "Invalid timestamp"}
+                                </i>
+                            </span>
+                        </li>
+                    ))
+                ) : (
+                    <li>No coordinates available!!!</li>
+                )}
+            </ul>
         </div>
     );
 };
 
-export default PositionForm;
+export default CoordinateHistory;

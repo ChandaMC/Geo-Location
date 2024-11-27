@@ -2,55 +2,78 @@ import React, { useEffect, useState } from "react";
 import { useCoordinateContext } from "../context/CoordinateContext.jsx";
 import "./CoordinatesHistory.css";
 import axios from "axios";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc"; // Import the utc plugin
+import timezone from "dayjs/plugin/timezone"; // Import the timezone plugin
 
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';  // Import the utc plugin
-import timezone from 'dayjs/plugin/timezone';  // Import the timezone plugin
-
-dayjs.extend(utc);  // Extend utc plugin
-dayjs.extend(timezone);  // Extend timezone plugin
+dayjs.extend(utc); // Extend utc plugin
+dayjs.extend(timezone); // Extend timezone plugin
 
 const CoordinateHistory = () => {
     const { timer, status } = useCoordinateContext();
-    const [coordinates, setCoordinates] = useState([]);
+    const [currentCoordinate, setCurrentCoordinate] = useState(null); // For the top <ul>
+    const [coordinateHistory, setCoordinateHistory] = useState([]); // For the bottom <ul>
 
-    // Function to fetch coordinates
-    const fetchCoordinates = async () => {
+    // Function to fetch the latest coordinate
+    const fetchLatestCoordinate = async () => {
         try {
             const response = await axios.get("http://localhost:5000/api/coordinates");
-            console.log("API Response:", response.data);
-            setCoordinates(response.data);
+            console.log("Fetched Latest Coordinate:", response.data);
+            const latestCoordinate = response.data;
+
+            // Update current coordinate
+            setCurrentCoordinate(latestCoordinate);
+
+            // Add the new coordinate to the history
+            setCoordinateHistory((prevHistory) => [latestCoordinate, ...prevHistory]);
         } catch (error) {
-            console.error("Error fetching coordinates history:", error);
+            console.error("Error fetching latest coordinate:", error);
         }
     };
 
-    // Fetch coordinates when the timer reaches 0 or when the component mounts
     useEffect(() => {
-        fetchCoordinates(); // Initial fetch on mount
-    }, []); // Fetch on initial render (empty dependency array)
-
-    useEffect(() => {
-        if (timer === 0) {
-            fetchCoordinates();
+        if (timer === 1) {
+            fetchLatestCoordinate().then();
         }
-    }, [timer]); // Fetch when the timer changes
+    }, [timer]);
 
     return (
         <div className="coordinate-history">
-            <h2>Current Coordinates</h2>
+            <h3>Current Coordinates</h3>
+
             <ul>
                 <li>
                     <span>Status:
-                        <i className="status"> { status }</i>
+                        <i className="status"> {status}</i>
                     </span>
-                    <span> | Next Update in: { timer } sec</span>
+                    <span> | Next Update in: {timer} sec</span>
                 </li>
+
+                {currentCoordinate && (
+                    <li>
+                        <span className="latitude">
+                            <strong>Latitude: </strong>
+                            <i>{currentCoordinate.latitude}</i>
+                        </span>
+                        <span className="longitude">
+                            <strong>Longitude: </strong>
+                            <i>{currentCoordinate.longitude}</i>
+                        </span>
+                        <span className="timestamp">
+                            <strong>Captured at: </strong>
+                            <i className="fas fa-clock">
+                                {currentCoordinate.timestamp && dayjs(currentCoordinate.timestamp).isValid()
+                                    ? dayjs(currentCoordinate.timestamp).tz("Africa/Lusaka", true).format("YYYY-MM-DD HH:mm:ss")
+                                    : "Invalid timestamp"}
+                            </i>
+                        </span>
+                    </li>
+                )}
             </ul>
 
             <ul className="coordinate-list">
-                {coordinates.length > 0 ? (
-                    coordinates.map((coord, index) => (
+                {coordinateHistory.length > 0 ? (
+                    coordinateHistory.map((coord, index) => (
                         <li className="coordinate-item" key={coord._id || index}>
                             <span className="latitude">
                                 <strong>Latitude: </strong>
@@ -60,15 +83,12 @@ const CoordinateHistory = () => {
                                 <strong>Longitude: </strong>
                                 <i>{coord.longitude}</i>
                             </span>
-
                             <span className="timestamp">
                                 <strong>Captured at: </strong>
                                 <i className="fas fa-clock">
-                                    {/* Ensure timestamp is valid before applying timezone */}
                                     {coord.timestamp && dayjs(coord.timestamp).isValid()
                                         ? dayjs(coord.timestamp).tz("Africa/Lusaka", true).format("YYYY-MM-DD HH:mm:ss")
-                                        : "Invalid timestamp"
-                                    }
+                                        : "Invalid timestamp"}
                                 </i>
                             </span>
                         </li>
