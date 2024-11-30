@@ -39,10 +39,19 @@
 .coordinate-item {
     background: white;
     cursor: pointer;
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
+.latitude, .longitude, .timestamp {
+    display: block;
+    margin: 0.2em 0;
+}
 .status {
     color: green;
     margin: 10px 0;
     text-align: center;
 }
+
