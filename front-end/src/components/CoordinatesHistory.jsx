@@ -13,7 +13,6 @@ dayjs.extend(timezone);
 
 const CoordinateHistory = () => {
     const { timer, status } = useCoordinateContext();
-    const [currentCoordinate, setCurrentCoordinate] = useState(null);
     const [coordinateHistory, setCoordinateHistory] = useState([]);
     const [error, setError] = useState(null);
 
