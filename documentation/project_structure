@@ -1,40 +1,50 @@
-Here is the project structure:  geo-location/
+Geo-location/
+│
+├── documentation/
+│   ├── project_structure.txt
+│   ├── project_screenshots/
+│   │   ├── coordinates_history.png
+│   │   ├── database.png
+│   │   ├── homepage.png
+│   │   ├── map.png
+│   │   └── sidebar.png
 │
 ├── back-end/                               # Backend directory for Node.js and Express server
 │   ├── node_modules/                       # Node.js dependencies
 │   ├── config/                             # Configuration files (e.g., database connection)
-│   │   └── db.js
+│   │   └── db.js                           # Database connection setup
 │   ├── controllers/                        # Controller files for handling requests
-│   │   └── locationController.js
-│   ├── my_models/
-│   │   └── Position.js
-│   ├── routes/                             # API routes
-│   │   └── locationRoutes.js
+│   │   └── locationController.js           # Handles requests related to location data
+│   ├── my_models/                          # Models for interacting with the database
+│   │   └── Position.js                     # Model representing the positions table in MySQL
+│   ├── routes/                             # API route definitions
+│   │   └── locationRoutes.js               # Routes for handling location-related API endpoints
 │   ├── server.js                           # Main server file (entry point)
 │   ├── package.json                        # Backend npm dependencies and scripts
-│   └── package-lock.json                   # Backend npm dependencies and scripts
+│   └── package-lock.json                   # Exact dependency versions for npm
 │
-└── front-end/                              # Frontend directory for React app
-    ├── node_modules/                       # React dependencies
-    ├── public/                             # Public directory for static assets
-    │   ├── index.html                      # Main HTML file for React app
-    │   └── favicon.ico                     # Icon for the app
-    ├── src/                                # Source files for the React app
-    │   ├── components/                     # Reusable components
-    │   │   ├── PositionForm.jsx
-    │   │   └── PositionForm.css
-    │   │   ├── MapView.jsx
-    │   │   └── MapView.css
-    │   │   ├── SideBar.jsx
-    │   │   └── SideBar.css
-    │   │   ├── CoordinateHistory.jsx
-    │   │   └── CoordinateHistory.css
-    │   ├── App.css                         # Styling for the main App component
-    │   ├── App.jsx                         # Main App component
-    │   ├── index.js                        # Entry point for React app
-    │   └── services/                       # API service files
-    │       └── locationRoutes.js
-    │       └── locationController.js
-    │       └── locationService.js
-    ├── package.json                        # Frontend npm dependencies and scripts
-    └── README.md                           # Frontend-specific README
+└── front-end/                               # Frontend directory for React app
+│    ├── node_modules/                       # React dependencies
+│    ├── public/                             # Public directory for static assets
+│    │   ├── index.html                      # Main HTML file for React app
+│    │   └── favicon.ico                     # Icon for the app
+│    ├── src/                                # Source files for the React app
+│    │   ├── components/                     # Reusable components
+│    │   │   ├── PositionForm.jsx            # Form for user interaction with location data
+│    │   │   └── PositionForm.css            # Styling for the PositionForm component
+│    │   │   ├── MapView.jsx                 # Map display showing user location
+│    │   │   └── MapView.css                 # Styling for the MapView component
+│    │   │   ├── SideBar.jsx                 # Sidebar navigation and controls
+│    │   │   └── SideBar.css                 # Styling for the SideBar component
+│    │   │   ├── CoordinateHistory.jsx       # History list of past coordinates
+│    │   │   └── CoordinateHistory.css       # Styling for the CoordinateHistory component
+│    │   ├── App.css                         # Styling for the main App component
+│    │   ├── App.jsx                         # Main App component
+│    │   ├── index.js                        # Entry point for React app
+│    │   └── services/                       # API service files for handling requests
+│    │       ├── locationRoutes.js           # Frontend API routes configuration
+│    │       ├── locationController.js       # Handles logic for interacting with location APIs
+│    │       └── locationService.js          # Service layer for API calls
+│    └──package.json                         # Frontend npm dependencies and scripts
+│
+└──  README.md                               # project README
